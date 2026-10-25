@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Who Gets Counted? Rwanda Vital Statistics 2019–2025 | Dynamic Infographic</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for Interactive Choropleth Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="badge-nisr">NISR 2026 INFOGRAPHIC COMPETITION</span>
+        <span class="badge-status"><i class="fa-solid fa-circle-check"></i> 100% VALIDATED DATA</span>
+      </div>
+      <div class="team-meta">
+        <span class="team-label"><i class="fa-solid fa-users"></i> Team Shujazz</span>
+        <span class="eligibility-tag"><i class="fa-solid fa-shield"></i> 2-Member Compliant</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section: The Grand Contrast -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-header">
+        <div class="subtitle-tag">RWANDA CIVIL REGISTRATION & VITAL STATISTICS · 2019–2025</div>
+        <h1 class="hero-title">Who gets counted?</h1>
+        <p class="hero-lead">
+          Rwanda records nearly every birth through hospitals and health centers. But when citizens die, half the registry goes blank. Here is the data story behind Rwanda’s 50.5% death recording gap.
+        </p>
+      </div>
+
+      <!-- Live Metric Comparison Cards -->
+      <div class="metric-comparison-grid">
+        <div class="card metric-card metric-birth">
+          <div class="card-icon"><i class="fa-solid fa-baby"></i></div>
+          <div class="metric-label">BIRTH REGISTRATION COMPLETENESS (2025)</div>
+          <div class="metric-value counter" data-target="92.9">92.9%</div>
+          <div class="metric-bar-wrap">
+            <div class="metric-bar" style="width: 92.9%; background: #0284c7;"></div>
+          </div>
+          <p class="metric-caption"><strong>9 in 10 births</strong> recorded into the civil registry in-year. Driven by near-universal health facility deliveries.</p>
+          <div class="source-tag">Source: NISR CRVS 2025, Table 10.6</div>
+        </div>
+
+        <div class="card metric-card metric-death highlight-danger">
+          <div class="card-icon"><i class="fa-solid fa-cross"></i></div>
+          <div class="metric-label">DEATH REGISTRATION COMPLETENESS (2025)</div>
+          <div class="metric-value counter text-warning" data-target="50.5">50.5%</div>
+          <div class="metric-bar-wrap">
+            <div class="metric-bar" style="width: 50.5%; background: #ea580c;"></div>
+          </div>
+          <p class="metric-caption"><strong>Only 1 in 2 deaths</strong> recorded in 2025. An estimated <strong>38,521 expected deaths</strong> never entered the registry that year.</p>
+          <div class="source-tag">Source: NISR CRVS 2025, Table 12 & Table 10.5</div>
+        </div>
+
+        <div class="card metric-card metric-gap">
+          <div class="card-icon"><i class="fa-solid fa-scale-unbalanced"></i></div>
+          <div class="metric-label">THE 2025 RECORDING GAP</div>
+          <div class="metric-value counter text-alert" data-target="38521">38,521</div>
+          <div class="metric-subtext">Missing deaths in 2025 alone</div>
+          <div class="gap-stat-row">
+            <div><span>Expected Deaths:</span> <strong>77,876</strong></div>
+            <div><span>Registered Deaths:</span> <strong>39,355</strong></div>
+          </div>
+          <p class="metric-caption">A rising registration rate signals system capture, not increasing mortality.</p>
+          <div class="source-tag">Expected = 77,876 (Table 12)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Story Tab Controller -->
+  <section class="story-tabs-nav">
+    <div class="container">
+      <div class="tab-button-group">
+        <button class="tab-btn active" data-tab="tab-map"><i class="fa-solid fa-map-location-dot"></i> 1. Where Deaths Occur</button>
+        <button class="tab-btn" data-tab="tab-gender"><i class="fa-solid fa-venus-mars"></i> 2. The Missing Women</button>
+        <button class="tab-btn" data-tab="tab-trend"><i class="fa-solid fa-chart-line"></i> 3. 2019–2025 Trajectory</button>
+        <button class="tab-btn" data-tab="tab-demographics"><i class="fa-solid fa-users-rays"></i> 4. Who Appears in Records</button>
+        <button class="tab-btn" data-tab="tab-causes"><i class="fa-solid fa-stethoscope"></i> 5. Cause of Death Divide</button>
+        <button class="tab-btn" data-tab="tab-simulator"><i class="fa-solid fa-sliders"></i> 6. 2030 Policy Simulator</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 1: GEOGRAPHIC DIVIDE (30 DISTRICT MAP) -->
+  <main class="container">
+    <div id="tab-map" class="story-panel active">
+      <div class="panel-header">
+        <span class="step-num">SECTION 01</span>
+        <h2>Place of Death: The Community Bottleneck</h2>
+        <p class="section-desc">
+          When someone dies in a hospital, staff log the death. When someone dies at home, grieving families must travel to the cell office with two witnesses within 30 days. That structural friction explains why rural districts lag.
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card map-container-card">
+          <div class="map-controls">
+            <span class="map-title"><i class="fa-solid fa-earth-africa"></i> Rwanda: Share of Registered Deaths Occurring in Community (2025)</span>
+            <div class="map-legend">
+              <span class="legend-chip c1">&ge; 60%</span>
+              <span class="legend-chip c2">50 - 59%</span>
+              <span class="legend-chip c3">40 - 49%</span>
+              <span class="legend-chip c4">&lt; 40%</span>
+            </div>
+          </div>
+          <div id="rwanda-map"></div>
+          <div class="map-footer-note">
+            <i class="fa-solid fa-hand-pointer"></i> Click or hover any of the 30 districts to inspect exact hospital vs community counts.
+          </div>
+        </div>
+
+        <div class="card district-inspector-card" id="district-inspector">
+          <div class="inspector-header">
+            <span class="district-badge" id="insp-type">RURAL DISTRICT</span>
+            <h3 id="insp-name">Muhanga District</h3>
+            <span class="insp-province" id="insp-province">Southern Province</span>
+          </div>
+
+          <div class="stat-callout-split">
+            <div class="stat-box primary">
+              <span class="stat-num" id="insp-comm-pct">67.2%</span>
+              <span class="stat-txt">Deaths at Community / Home</span>
+              <span class="stat-count" id="insp-comm-count">(901 deaths)</span>
+            </div>
+            <div class="stat-box secondary">
+              <span class="stat-num" id="insp-fac-pct">32.8%</span>
+              <span class="stat-txt">Deaths at Health Facilities</span>
+              <span class="stat-count" id="insp-fac-count">(440 deaths)</span>
+            </div>
+          </div>
+
+          <div class="inspector-details">
+            <div class="detail-row">
+              <span>Total Registered Deaths:</span>
+              <strong id="insp-total">1,341</strong>
+            </div>
+            <div class="detail-row">
+              <span>National Rank in Community Deaths:</span>
+              <strong id="insp-rank">#1 Highest Share in Rwanda</strong>
+            </div>
+          </div>
+
+          <div class="national-benchmarks">
+            <h4>National Average Comparison</h4>
+            <div class="benchmark-bar-group">
+              <div class="bench-label">Community Deaths (National: 55.9%):</div>
+              <div class="bench-bar-track">
+                <div class="bench-bar-fill" id="insp-bar-fill" style="width: 67.2%;"></div>
+              </div>
+            </div>
+            <div class="benchmark-bar-group">
+              <div class="bench-label">Facility Deaths (National: 44.1%):</div>
+              <div class="bench-bar-track">
+                <div class="bench-bar-fill facility" id="insp-bar-fac" style="width: 32.8%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="policy-callout">
+            <i class="fa-solid fa-lightbulb"></i>
+            <p id="insp-takeaway">
+              In Muhanga and Nyaruguru, 2 out of 3 deaths happen at home. Without active Community Health Worker (CHW) reporting, these deaths risk falling through the cracks.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: THE GENDER GAP (MISSING WOMEN) -->
+    <div id="tab-gender" class="story-panel">
+      <div class="panel-header">
+        <span class="step-num">SECTION 02</span>
+        <h2>The Sex Gap: Why 58% of Missing Deaths Are Women</h2>
+        <p class="section-desc">
+          More men appear in death records, and male completeness (57.6%) exceeds female completeness (43.7%) by 13.9 percentage points. When you compare expected deaths against registered deaths, a striking pattern emerges.
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <h3>Completeness by Sex (2025)</h3>
+          <p class="card-caption">Share of expected deaths captured in civil registry</p>
+          
+          <div class="sex-compare-widget">
+            <div class="sex-item male">
+              <div class="sex-head">
+                <i class="fa-solid fa-person text-male"></i>
+                <span class="sex-title">MALE DEATHS</span>
+                <span class="completeness-tag text-male">57.6% Registered</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-male" style="width: 57.6%;"></div>
+              </div>
+              <div class="sex-numbers">
+                <div><span>Registered:</span> <strong>22,051</strong></div>
+                <div><span>Expected:</span> <strong>38,262</strong></div>
+                <div><span>Unregistered Gap:</span> <strong class="text-alert">16,211</strong></div>
+              </div>
+            </div>
+
+            <div class="sex-item female">
+              <div class="sex-head">
+                <i class="fa-solid fa-person-dress text-female"></i>
+                <span class="sex-title">FEMALE DEATHS</span>
+                <span class="completeness-tag text-female">43.7% Registered</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-female" style="width: 43.7%;"></div>
+              </div>
+              <div class="sex-numbers">
+                <div><span>Registered:</span> <strong>17,304</strong></div>
+                <div><span>Expected:</span> <strong>39,614</strong></div>
+                <div><span>Unregistered Gap:</span> <strong class="text-danger">22,310</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sex-delta-box">
+            <div class="delta-num">13.9 pp</div>
+            <div class="delta-text">
+              <strong>Completeness Gap:</strong> Male death completeness is 13.9 percentage points higher than female death completeness.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>The Anatomy of Missing Deaths</h3>
+          <p class="card-caption">Of the 38,521 total unregistered deaths in Rwanda in 2025:</p>
+
+          <div class="donut-chart-wrapper">
+            <canvas id="missingWomenChart" width="300" height="300"></canvas>
+          </div>
+
+          <div class="missing-breakdown-stats">
+            <div class="mb-stat female">
+              <span class="dot female"></span>
+              <strong>57.9% Missing Women</strong> (22,310 deaths)
+            </div>
+            <div class="mb-stat male">
+              <span class="dot male"></span>
+              <strong>42.1% Missing Men</strong> (16,211 deaths)
+            </div>
+          </div>
+
+          <div class="policy-note">
+            <h4>Why Does This Gap Exist?</h4>
+            <p>
+              In Rwanda, official death certificates are most often sought when property, land titles, or bank accounts need formal inheritance clearance. Because men more frequently hold legal title to household assets, families face strong economic incentives to register male deaths. Without inheritance triggers, female deaths are far more likely to go undeclared.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: 2019-2025 TRAJECTORY & TIMELINESS -->
+    <div id="tab-trend" class="story-panel">
+      <div class="panel-header">
+        <span class="step-num">SECTION 03</span>
+        <h2>2019–2025: Strong Gains, Timeliness Reversal, and the Backlog</h2>
+        <p class="section-desc">
+          Death registration rose from 31.4% in 2019 to 50.5% in 2025 (+19.1 percentage points). But 2025 brought two critical shifts: late in-year registrations tripled, and a massive historical backlog entered the system.
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <h3>Registration Completeness Trajectory (2019–2025)</h3>
+          <p class="card-caption">Comparing Births vs Deaths vs Gender</p>
+          <div class="chart-box">
+            <canvas id="trendChart"></canvas>
+          </div>
+          <div class="trend-callout">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            <span><strong>+19.1 pp gain:</strong> Completeness jumped from 26.2% in 2021 to 50.5% in 2025 following digital CRVS decentralization.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>The 2025 Backlog & Timeliness Surge</h3>
+          <p class="card-caption">Total deaths registered during calendar year 2025: <strong>57,067</strong></p>
+
+          <div class="backlog-visual">
+            <div class="backlog-bar">
+              <div class="b-part in-year" style="width: 69%;" title="Occurred in 2025: 39,355 (69%)">
+                69% In-Year
+              </div>
+              <div class="b-part earlier" style="width: 31%;" title="Occurred in Earlier Years: 17,712 (31%)">
+                31% Backlog (17,712)
+              </div>
+            </div>
+            <div class="backlog-legend">
+              <span><span class="b-dot in-year"></span> Deaths occurring in 2025: <strong>39,355</strong></span>
+              <span><span class="b-dot earlier"></span> Mop-up backlog from earlier years: <strong>17,712</strong></span>
+            </div>
+          </div>
+
+          <div class="timeliness-box">
+            <h4>In-Year Registration Timeliness (Within vs After 30 Days)</h4>
+            <div class="timeliness-grid">
+              <div class="time-card timely">
+                <span class="t-val">89.9%</span>
+                <span class="t-lbl">Timely (&le;30 Days)</span>
+                <span class="t-sub">35,356 records</span>
+              </div>
+              <div class="time-card late">
+                <span class="t-val text-alert">10.1%</span>
+                <span class="t-lbl">Late (>30 Days)</span>
+                <span class="t-sub">Up from 3.7% in 2024</span>
+              </div>
+            </div>
+            <p class="time-desc">
+              Rwanda family law requires reporting deaths within 30 days. In 2024, only 3.7% were late. In 2025, late reporting jumped to 10.1%, reflecting post-deadline mop-ups.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: DEMOGRAPHICS (AGE-SEX PYRAMID) -->
+    <div id="tab-demographics" class="story-panel">
+      <div class="panel-header">
+        <span class="step-num">SECTION 04</span>
+        <h2>Who Appears in the Records?</h2>
+        <p class="section-desc">
+          Examining the 39,355 deaths registered in 2025 across all age bands and sex. Note: This shows <em>who appears</em> in the registry, not age-specific completeness rates (which require age-specific expected deaths).
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <h3>Age-Sex Structure of Registered Deaths (2025)</h3>
+          <p class="card-caption">Exact 5-year cohort counts from NISR Figure 19</p>
+          <div class="chart-box-pyramid">
+            <canvas id="pyramidChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Validated Age Band Breakdown (100% Math Truth)</h3>
+          <p class="card-caption">All percentages strictly checked against 39,355 total records</p>
+          
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Age Cohort</th>
+                <th>Male</th>
+                <th>Female</th>
+                <th>Total Deaths</th>
+                <th>Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>0–4 years</strong></td>
+                <td>3,519</td>
+                <td>2,874</td>
+                <td><strong>6,393</strong></td>
+                <td><span class="pct-pill">16.2%</span></td>
+              </tr>
+              <tr>
+                <td><strong>5–14 years</strong></td>
+                <td>552</td>
+                <td>398</td>
+                <td><strong>950</strong></td>
+                <td><span class="pct-pill">2.4%</span></td>
+              </tr>
+              <tr>
+                <td><strong>15–24 years</strong></td>
+                <td>1,196</td>
+                <td>535</td>
+                <td><strong>1,731</strong></td>
+                <td><span class="pct-pill">4.4%</span></td>
+              </tr>
+              <tr>
+                <td><strong>25–39 years</strong></td>
+                <td>2,943</td>
+                <td>1,530</td>
+                <td><strong>4,473</strong></td>
+                <td><span class="pct-pill">11.4%</span></td>
+              </tr>
+              <tr>
+                <td><strong>40–59 years</strong></td>
+                <td>4,123</td>
+                <td>2,790</td>
+                <td><strong>6,913</strong></td>
+                <td><span class="pct-pill">17.6%</span></td>
+              </tr>
+              <tr class="highlight-row">
+                <td><strong>60+ years</strong></td>
+                <td>9,718</td>
+                <td>9,177</td>
+                <td><strong>18,895</strong></td>
+                <td><span class="pct-pill highlight">48.0%</span></td>
+              </tr>
+              <tr class="total-row">
+                <td><strong>Total (Rwanda)</strong></td>
+                <td><strong>22,051</strong></td>
+                <td><strong>17,304</strong></td>
+                <td><strong>39,355</strong></td>
+                <td><strong>100.0%</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="warning-callout">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              <strong>Correction of Draft Error:</strong> Previous team drafts mistakenly reported 5–14 years as 4.8% (actual: 2.4%) and 25–39 years as 6.8% (actual: 11.4%), leading to a sum of 95.8%. The official validated numbers sum to exactly 100.0%.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: CAUSE OF DEATH DIVIDE -->
+    <div id="tab-causes" class="story-panel">
+      <div class="panel-header">
+        <span class="step-num">SECTION 05</span>
+        <h2>Cause of Death: Facility vs. Community Divergence</h2>
+        <p class="section-desc">
+          Where a person dies fundamentally alters the documented cause of death. Hospital deaths are certified by doctors (MCCD), while community deaths rely on verbal autopsy (VA).
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <h3>Health Facility vs. Community Cause Profiles</h3>
+          <p class="card-caption">Distribution across 3 broad disease categories (Figure 25)</p>
+          <div class="chart-box">
+            <canvas id="causeChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Key Insights on Cause Documentation</h3>
+          
+          <div class="cause-insight-card">
+            <div class="ci-icon text-ncd"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div class="ci-body">
+              <h4>Noncommunicable Diseases (NCDs) Dominate Community Deaths</h4>
+              <p>
+                NCDs account for <strong>58.8%</strong> of usable community deaths versus <strong>49.5%</strong> in health facilities. Cardiovascular conditions, diabetes, and cancers frequently culminate at home.
+              </p>
+            </div>
+          </div>
+
+          <div class="cause-insight-card">
+            <div class="ci-icon text-comm"><i class="fa-solid fa-virus"></i></div>
+            <div class="ci-body">
+              <h4>Communicable Conditions Higher in Facilities (40.0% vs. 26.9%)</h4>
+              <p>
+                Severe infections and perinatal complications are actively brought to hospitals before death, making up 40.0% of facility fatalities compared to 26.9% in the community.
+              </p>
+            </div>
+          </div>
+
+          <div class="cause-insight-card">
+            <div class="ci-icon text-injury"><i class="fa-solid fa-person-falling-burst"></i></div>
+            <div class="ci-body">
+              <h4>Injuries Claim Higher Share at Home (14.3% vs. 10.5%)</h4>
+              <p>
+                Fatal accidents, falls, and occupational injuries occurring away from clinics often result in on-scene or at-home expiration before hospital admission is possible.
+              </p>
+            </div>
+          </div>
+
+          <div class="policy-note">
+            <h4>Data Note on Usability:</h4>
+            <p>
+              In 2025, verbal autopsies scaled significantly: <strong>18,922</strong> community deaths had assigned causes (85.9% of registered community deaths), providing health planners with vital epidemiological visibility.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: POLICY SIMULATOR TO 2030 -->
+    <div id="tab-simulator" class="story-panel">
+      <div class="panel-header">
+        <span class="step-num">SECTION 06</span>
+        <h2>2030 Policy Target Simulator</h2>
+        <p class="section-desc">
+          Rwanda aims to achieve &ge;80% death registration completeness by 2030. Test the impact of 3 evidence-based policy levers to see how Rwanda can close the gap.
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card sim-controls-card">
+          <h3>Interactive Policy Levers</h3>
+          <p class="card-caption">Adjust sliders to model civil registry expansion by 2030:</p>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label><i class="fa-solid fa-user-nurse"></i> 1. Community Health Worker (CHW) Direct Reporting</label>
+              <span class="slider-val" id="val-chw">+8%</span>
+            </div>
+            <input type="range" id="slider-chw" min="0" max="15" value="8" step="1">
+            <span class="slider-desc">Empower 58,000 CHWs across Rwanda to initiate death notifications via mobile phones at the village level.</span>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label><i class="fa-solid fa-venus"></i> 2. Female Death Registration Audits & Fee Waivers</label>
+              <span class="slider-val" id="val-female">+7%</span>
+            </div>
+            <input type="range" id="slider-female" min="0" max="12" value="7" step="1">
+            <span class="slider-desc">Remove administrative fee barriers and tie social protection verification to female death registration.</span>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label><i class="fa-solid fa-id-card"></i> 3. Cell Office Digital Kiosks & Witness Relaxation</label>
+              <span class="slider-val" id="val-kiosk">+5%</span>
+            </div>
+            <input type="range" id="slider-kiosk" min="0" max="10" value="5" step="1">
+            <span class="slider-desc">Allow digital witness affidavits and one-stop registration at sector health centers.</span>
+          </div>
+        </div>
+
+        <div class="card sim-output-card">
+          <h3>Projected 2030 Completeness</h3>
+          
+          <div class="projected-gauge">
+            <div class="gauge-value" id="proj-result">70.5%</div>
+            <div class="gauge-target">TARGET: &ge; 80% BY 2030</div>
+          </div>
+
+          <div class="sim-comparison">
+            <div class="sc-col">
+              <span>2025 Actual</span>
+              <strong>50.5%</strong>
+            </div>
+            <div class="sc-col">
+              <span>Historical Trend (No Interventions)</span>
+              <strong>67.0%</strong>
+            </div>
+            <div class="sc-col highlight">
+              <span>With Your Policy Package</span>
+              <strong id="sc-proj">70.5%</strong>
+            </div>
+          </div>
+
+          <div class="policy-recommendations">
+            <h4>3 Actionable Recommendations for NISR & MINALOC:</h4>
+            <ol>
+              <li><strong>Integrate CHWs into Irembo/CRVS:</strong> Allow community health workers to log death notices upon home visits so grieving families do not bear sole travel burdens.</li>
+              <li><strong>Target Female Under-Registration:</strong> District-level gender audits of civil registration desks to understand local inheritance dynamics and remove registration costs.</li>
+              <li><strong>Publish Age-Specific Denominators:</strong> Provide census-projected expected deaths by age band so researchers can identify true age-specific completeness rates.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <strong>Team Shujazz · NISR Infographic Competition 2026</strong>
+        <p>Data Source: National Institute of Statistics of Rwanda (NISR), <em>Rwanda Vital Statistics Report 2025</em> (CRVS System Data, 2019–2025).</p>
+      </div>
+      <div class="footer-right">
+        <a href="static-poster/poster.html" target="_blank" class="btn-footer"><i class="fa-solid fa-file-pdf"></i> View Printable Static Poster</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts: Leaflet, Chart.js, Data, App -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

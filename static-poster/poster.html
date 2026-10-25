@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Who Gets Counted? Rwanda Vital Statistics (2019–2025) | Static Poster</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    :root {
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-num: 'Space Grotesk', sans-serif;
+      --c-navy: #091e42;
+      --c-blue: #0284c7;
+      --c-amber: #ea580c;
+      --c-dark-amber: #c2410c;
+      --c-red: #dc2626;
+      --c-male: #2563eb;
+      --c-female: #db2777;
+      --c-bg: #f8fafc;
+      --c-card: #ffffff;
+      --c-border: #e2e8f0;
+      --c-muted: #475569;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      color: var(--c-navy);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Standard High-Res Poster Container (approx A3 aspect ratio: 800px x 1200px) */
+    .poster-canvas {
+      width: 960px;
+      background: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      padding: 48px 48px 40px;
+      position: relative;
+    }
+
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .poster-canvas { width: 100%; box-shadow: none; padding: 20px; }
+      .no-print { display: none !important; }
+    }
+
+    /* Header */
+    .poster-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--c-navy);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .kicker {
+      font-family: var(--font-num);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--c-blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .main-title {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--c-navy);
+      margin-bottom: 12px;
+    }
+
+    .main-dek {
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--c-muted);
+      max-width: 620px;
+      line-height: 1.4;
+    }
+
+    .header-aside {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .tag-nisr {
+      background: var(--c-navy);
+      color: #ffffff;
+      font-family: var(--font-num);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .team-badge {
+      font-size: 13px;
+      color: var(--c-muted);
+      font-weight: 600;
+    }
+
+    .team-badge strong {
+      color: var(--c-navy);
+      font-size: 15px;
+    }
+
+    /* Hero Banner: The Core Contrast */
+    .hero-banner {
+      background: #f8fafc;
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .hero-stat-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-family: var(--font-num);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--c-muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .stat-big {
+      font-family: var(--font-num);
+      font-size: 60px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .stat-big.blue { color: var(--c-blue); }
+    .stat-big.amber { color: var(--c-amber); }
+    .stat-big.red { color: var(--c-red); }
+
+    .stat-desc {
+      font-size: 13px;
+      color: var(--c-muted);
+      line-height: 1.4;
+    }
+
+    .hero-gap-col {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+
+    .gap-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--c-dark-amber);
+      text-transform: uppercase;
+      font-family: var(--font-num);
+      margin-bottom: 4px;
+    }
+
+    .gap-number {
+      font-family: var(--font-num);
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--c-red);
+      line-height: 1.05;
+      margin-bottom: 6px;
+    }
+
+    .gap-explainer {
+      font-size: 12px;
+      color: #9a3412;
+      line-height: 1.4;
+    }
+
+    /* Grid Sections */
+    .poster-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .p-card {
+      background: #ffffff;
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .card-title-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+
+    .card-icon {
+      font-size: 16px;
+      color: var(--c-blue);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--c-navy);
+    }
+
+    /* Section 1: Gender Gap */
+    .gender-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .gender-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gender-label {
+      width: 80px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .gender-bar-track {
+      flex: 1;
+      height: 22px;
+      background: #f1f5f9;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gender-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-num);
+    }
+
+    .gender-bar-fill.male { background: var(--c-male); width: 57.6%; }
+    .gender-bar-fill.female { background: var(--c-female); width: 43.7%; }
+
+    .gender-stat-tag {
+      font-family: var(--font-num);
+      font-size: 14px;
+      font-weight: 800;
+      width: 50px;
+      text-align: right;
+    }
+
+    .gender-insight-box {
+      margin-top: 10px;
+      background: #fdf2f8;
+      border-left: 3px solid var(--c-female);
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      color: #831843;
+      line-height: 1.45;
+    }
+
+    /* Section 2: Place of Death */
+    .place-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .place-stat {
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .place-stat.community { background: #fff7ed; border: 1px solid #fed7aa; }
+    .place-stat.facility { background: #f0f9ff; border: 1px solid #bae6fd; }
+
+    .ps-num {
+      font-family: var(--font-num);
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .place-stat.community .ps-num { color: var(--c-amber); }
+    .place-stat.facility .ps-num { color: var(--c-blue); }
+
+    .ps-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--c-muted);
+    }
+
+    .ps-sub {
+      font-size: 10px;
+      color: #64748b;
+    }
+
+    .district-extremes {
+      font-size: 11.5px;
+      color: var(--c-muted);
+      line-height: 1.45;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    /* Section 3: Trajectory & Backlog */
+    .trend-sparkline-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0 16px;
+    }
+
+    .t-node {
+      text-align: center;
+    }
+
+    .t-node .t-yr { font-size: 10px; font-weight: 700; color: #64748b; }
+    .t-node .t-pct { font-family: var(--font-num); font-size: 14px; font-weight: 800; color: var(--c-navy); }
+    .t-node.active .t-pct { color: var(--c-amber); font-size: 16px; }
+
+    .backlog-pill-bar {
+      height: 28px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      display: flex;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 28px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .bp-inyear { width: 69%; background: var(--c-blue); }
+    .bp-backlog { width: 31%; background: #64748b; }
+
+    .bp-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--c-muted);
+    }
+
+    /* Section 4: Validated Age Bands */
+    .age-bars-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .age-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+    }
+
+    .abi-label { width: 55px; font-weight: 700; color: var(--c-navy); }
+
+    .abi-track {
+      flex: 1;
+      height: 14px;
+      background: #f1f5f9;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .abi-fill {
+      height: 100%;
+      background: #0ea5e9;
+      border-radius: 3px;
+    }
+
+    .abi-fill.elderly { background: var(--c-navy); }
+    .abi-fill.child { background: #f59e0b; }
+
+    .abi-stat {
+      width: 75px;
+      text-align: right;
+      font-family: var(--font-num);
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    /* Bottom Policy Recommendations */
+    .policy-banner {
+      background: linear-gradient(135deg, #091e42 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .pb-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .pb-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pb-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+
+    .pb-col p {
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    /* Footer */
+    .poster-footer {
+      border-top: 1px solid var(--c-border);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .print-bar {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-print {
+      background: var(--c-navy);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-print:hover { background: #1e293b; }
+  </style>
+</head>
+<body>
+
+<div style="max-width: 960px; width: 100%;">
+  <div class="print-bar no-print">
+    <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> Print or Save as High-Res PDF</button>
+  </div>
+
+  <div class="poster-canvas">
+    <!-- Header -->
+    <header class="poster-header">
+      <div>
+        <div class="kicker">RWANDA CIVIL REGISTRATION & VITAL STATISTICS · 2019–2025</div>
+        <h1 class="main-title">WHO GETS COUNTED?</h1>
+        <p class="main-dek">
+          Rwanda records nearly every birth through its health system. But when citizens die, half the registry goes blank. Here is the data story behind Rwanda’s 50.5% death recording gap.
+        </p>
+      </div>
+      <div class="header-aside">
+        <span class="tag-nisr">NISR INFOGRAPHIC COMPETITION 2026</span>
+        <div class="team-badge">
+          Presented by <strong>Team Shujazz</strong><br>
+          <span style="font-size: 11px; color: #64748b;">(2-Member Student Team Compliant)</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-stat-col">
+        <span class="stat-label">Birth Registration Completeness</span>
+        <div class="stat-big blue">92.9%</div>
+        <p class="stat-desc"><strong>9 in 10 births</strong> recorded in-year. Anchored by near-universal facility deliveries across Rwanda.</p>
+      </div>
+
+      <div class="hero-stat-col">
+        <span class="stat-label">Death Registration Completeness</span>
+        <div class="stat-big amber">50.5%</div>
+        <p class="stat-desc"><strong>Only 1 in 2 deaths</strong> recorded in 2025 (39,355 registered out of 77,876 expected deaths).</p>
+      </div>
+
+      <div class="hero-gap-col">
+        <div class="gap-header">The Unregistered Divide</div>
+        <div class="gap-number">38,521</div>
+        <p class="gap-explainer">
+          Expected deaths that never entered the civil register during 2025. A rising completeness rate reflects expanding capture, not rising mortality.
+        </p>
+      </div>
+    </section>
+
+    <!-- 2x2 Analytical Grid -->
+    <div class="poster-grid">
+      <!-- Card 1: The Sex Gap -->
+      <div class="p-card">
+        <div class="card-title-bar">
+          <i class="fa-solid fa-venus-mars card-icon"></i>
+          <h2 class="card-title">01 The Sex Gap: 58% of Missing Deaths Are Women</h2>
+        </div>
+        
+        <div class="gender-box">
+          <div class="gender-row">
+            <span class="gender-label">Male:</span>
+            <div class="gender-bar-track">
+              <div class="gender-bar-fill male">22,051 deaths</div>
+            </div>
+            <span class="gender-stat-tag" style="color: var(--c-male);">57.6%</span>
+          </div>
+
+          <div class="gender-row">
+            <span class="gender-label">Female:</span>
+            <div class="gender-bar-track">
+              <div class="gender-bar-fill female">17,304 deaths</div>
+            </div>
+            <span class="gender-stat-tag" style="color: var(--c-female);">43.7%</span>
+          </div>
+        </div>
+
+        <div class="gender-insight-box">
+          <strong>13.9 pp Gap:</strong> Female death completeness (43.7%) severely lags male completeness (57.6%). Of the 38,521 unregistered deaths in Rwanda, <strong>22,310 (57.9%) are female</strong>, driven by inheritance and land transfer rules that prioritize male death certificates.
+        </div>
+      </div>
+
+      <!-- Card 2: Place Matters -->
+      <div class="p-card">
+        <div class="card-title-bar">
+          <i class="fa-solid fa-house-chimney-medical card-icon"></i>
+          <h2 class="card-title">02 Place Matters: 56% Occur in the Community</h2>
+        </div>
+
+        <div class="place-split">
+          <div class="place-stat community">
+            <div class="ps-num">55.9%</div>
+            <div class="ps-lbl">COMMUNITY DEATHS</div>
+            <div class="ps-sub">22,010 registered</div>
+          </div>
+          <div class="place-stat facility">
+            <div class="ps-num">44.1%</div>
+            <div class="ps-lbl">HEALTH FACILITIES</div>
+            <div class="ps-sub">17,345 registered</div>
+          </div>
+        </div>
+
+        <div class="district-extremes">
+          <strong>District Contrast:</strong> Rural districts like <strong>Muhanga (67.2%)</strong> and <strong>Nyaruguru (66.0%)</strong> record 2 out of 3 deaths at home. Urban districts like <strong>Kicukiro (67.7% facility)</strong> log most deaths in hospitals.
+        </div>
+      </div>
+
+      <!-- Card 3: 2019-2025 Trajectory & Backlog -->
+      <div class="p-card">
+        <div class="card-title-bar">
+          <i class="fa-solid fa-chart-line card-icon"></i>
+          <h2 class="card-title">03 Progress is Real — But a Mop-up Backlog Surges</h2>
+        </div>
+
+        <div class="trend-sparkline-row">
+          <div class="t-node"><span class="t-yr">2019</span><div class="t-pct">31.4%</div></div>
+          <div class="t-node"><span class="t-yr">2020</span><div class="t-pct">29.9%</div></div>
+          <div class="t-node"><span class="t-yr">2021</span><div class="t-pct">26.2%</div></div>
+          <div class="t-node"><span class="t-yr">2022</span><div class="t-pct">31.1%</div></div>
+          <div class="t-node"><span class="t-yr">2023</span><div class="t-pct">41.8%</div></div>
+          <div class="t-node"><span class="t-yr">2024</span><div class="t-pct">46.1%</div></div>
+          <div class="t-node active"><span class="t-yr">2025</span><div class="t-pct">50.5%</div></div>
+        </div>
+
+        <div class="backlog-pill-bar">
+          <div class="bp-inyear">69% In-Year (39,355)</div>
+          <div class="bp-backlog">31% Backlog (17,712)</div>
+        </div>
+        <div class="bp-legend">
+          <span>Total registered in 2025: <strong>57,067</strong></span>
+          <span>17,712 deaths occurred in earlier years</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Age Structure (100% Math Truth) -->
+      <div class="p-card">
+        <div class="card-title-bar">
+          <i class="fa-solid fa-users-line card-icon"></i>
+          <h2 class="card-title">04 Who Appears in the Record? (Age Profile)</h2>
+        </div>
+
+        <div class="age-bars-list">
+          <div class="age-bar-item">
+            <span class="abi-label">0–4 yrs</span>
+            <div class="abi-track"><div class="abi-fill child" style="width: 16.2%;"></div></div>
+            <span class="abi-stat">6,393 (16.2%)</span>
+          </div>
+          <div class="age-bar-item">
+            <span class="abi-label">5–14 yrs</span>
+            <div class="abi-track"><div class="abi-fill" style="width: 2.4%;"></div></div>
+            <span class="abi-stat">950 (2.4%)</span>
+          </div>
+          <div class="age-bar-item">
+            <span class="abi-label">15–24 yrs</span>
+            <div class="abi-track"><div class="abi-fill" style="width: 4.4%;"></div></div>
+            <span class="abi-stat">1,731 (4.4%)</span>
+          </div>
+          <div class="age-bar-item">
+            <span class="abi-label">25–39 yrs</span>
+            <div class="abi-track"><div class="abi-fill" style="width: 11.4%;"></div></div>
+            <span class="abi-stat">4,473 (11.4%)</span>
+          </div>
+          <div class="age-bar-item">
+            <span class="abi-label">40–59 yrs</span>
+            <div class="abi-track"><div class="abi-fill" style="width: 17.6%;"></div></div>
+            <span class="abi-stat">6,913 (17.6%)</span>
+          </div>
+          <div class="age-bar-item">
+            <span class="abi-label">60+ yrs</span>
+            <div class="abi-track"><div class="abi-fill elderly" style="width: 48.0%;"></div></div>
+            <span class="abi-stat">18,895 (48.0%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Policy Banner -->
+    <div class="policy-banner">
+      <div class="pb-head">
+        <i class="fa-solid fa-compass"></i>
+        <span>Policy Actions to Reach &ge;80% Completeness by 2030</span>
+      </div>
+      <div class="pb-grid">
+        <div class="pb-col">
+          <h4>1. Mobile CHW Reporting</h4>
+          <p>Equip Community Health Workers to file digital death notices at the village level, removing travel barriers for rural families.</p>
+        </div>
+        <div class="pb-col">
+          <h4>2. Audit Female Death Barriers</h4>
+          <p>Decouple death registration from male inheritance disputes and waive all late fees for registering deceased mothers and daughters.</p>
+        </div>
+        <div class="pb-col">
+          <h4>3. Age-Specific Denominators</h4>
+          <p>NISR should publish census-projected expected deaths by age group to reveal exact age-specific under-registration rates.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="poster-footer">
+      <div>
+        <strong>Source:</strong> National Institute of Statistics of Rwanda (NISR), <em>Rwanda Vital Statistics Report 2025</em> (Tables 11, 12, 14; Figures 16, 18, 19).
+      </div>
+      <div>
+        NISR Infographic Competition 2026 · Validated Submission
+      </div>
+    </footer>
+  </div>
+</div>
+
+</body>
+</html>
