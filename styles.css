@@ -573,7 +573,8 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 
 /* ---------- Footer ---------- */
 .footer { padding: 64px var(--gutter) 40px; border-top: 1px solid var(--ink); }
-.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+.footer__grid .dl-btn { margin-top: 14px; }
 .footer p { font-size: 14px; color: var(--ink-2); max-width: 60ch; }
 .footer .mono { margin-bottom: 8px; display: block; }
 .dl-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; }
@@ -585,7 +586,8 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .footer__dl { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
 .footer__dl .topbar__btn { font-size: 12px; }
 .footer__bottom { margin-top: 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-@media (max-width: 760px) { .footer__grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .footer__grid { grid-template-columns: 1fr; } }
 
 /* ---------- Pages ---------- */
 #smooth-content { will-change: transform; }
