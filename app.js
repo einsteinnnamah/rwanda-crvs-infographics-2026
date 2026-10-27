@@ -626,6 +626,7 @@
       document.body.setAttribute('data-page', page);
       setProgress(page);
       if (push) history.replaceState(null, '', page === 'cover' ? location.pathname + location.search : '#' + page);
+      if (window.va) window.va('event', { name: 'chapter_view', data: { page } });
       $$('#chapters a').forEach(a => a.toggleAttribute('data-current', a.getAttribute('href') === '#' + page));
       hardTop();
       initPage(page);
