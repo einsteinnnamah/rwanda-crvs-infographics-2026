@@ -23,16 +23,26 @@ This repository hosts **both the dynamic and static infographics** created for t
 
 ## 🚀 Live Demo & Interactive Application
 
-* **Dynamic Infographic (Web App):** Open `index.html` in any modern web browser or visit the deployed GitHub Pages site.
-  * **Features:**
-    * Interactive 30-District Choropleth Map of Rwanda (Leaflet.js + ADM2 GeoJSON)
-    * The Missing Women Demographic Explorer
-    * Historical Completeness Trajectory (2019–2025)
-    * Age-Sex Demographic Pyramid (100% verified math across 17 cohorts)
-    * Facility vs. Community Cause of Death Breakdown
-    * Interactive 2030 Policy Target Simulator
+* **Dynamic Infographic (Web App):** Open `index.html` in any modern web browser or visit the deployed GitHub Pages site. No build step.
+  * A nine-chapter scroll story in an editorial "paper and ink" system (Instrument Serif figures, Inter Tight text, Space Mono labels, one brick-red accent).
+  * **Chapters:**
+    1. *Seven years on the record* — pinned horizontal timeline, one panel per year, with a ruler that tracks scroll position (GSAP ScrollTrigger; vertical fallback on phones and for reduced motion)
+    2. *The ones not counted* — a 7,788-dot field (one dot = ten expected deaths) where 3,852 dots fade to outlines as you scroll
+    3. *The missing women* — hand-drawn expected-vs-registered bars by sex (rough.js)
+    4. *Where people die* — hand-drawn pie plus a hand-drawn SVG map of the 30 districts (hatch density and colour encode the community share) linked to a district inspector, a ranked strip of all 30 districts, and the extremes table
+    5. *The backlog and the clock* — in-year vs earlier-year registrations, and the timeliness reversal
+    6. *Who appears in the record* — age bands with a companion table that sums to 100.0%
+    7. *What the record says they died of* — facility vs community cause pies
+    8. *Three drivers, one gap* — relationship diagram linking place, sex and time to the 38,521
+    9. *Now close the gap* — interactive 2030 policy simulator
+  * Every chart has a hover tooltip and a text or table equivalent; `prefers-reduced-motion` is honoured throughout.
+  * **Dark mode by default**, with a light toggle in the top bar (persisted). Charts, map and dot field re-render from CSS tokens on switch.
+  * **Three languages:** English, French and Kinyarwanda (EN / FR / RW in the top bar, or `?lang=fr`). Dictionary in `i18n.js`, keyed by the English source text. *The Kinyarwanda copy should be proofread by a native speaker before submission.*
+  * **Paged reader:** the cover (hero + key findings) and each chapter are separate pages. Only one is visible at a time; you move with the previous / next cards that close every chapter, the Chapters index, the ← → keys, or a `#ch-0N` hash. The top bar shows `0N / 09` plus the current chapter title.
+  * **Motion:** GSAP ScrollSmoother (desktop only; native scroll on touch and with reduced motion) with parallax on hero figures; chapter titles rise in word by word; every rough.js chart sketches itself in stroke by stroke on entry; figures count up; table rows and cards stagger; timeline panels animate as the ruler advances.
 * **Static Poster (Print-Ready):** [`static-poster/poster.html`](static-poster/poster.html)
-  * Vector typography and high-contrast analytical design pre-formatted for 300-DPI A3 / Poster PDF export.
+  * A true A3 portrait sheet (`@page { size: A3 }`) in the same visual system, with fixed-seed hand-drawn charts so every PDF export is identical.
+  * Export: open in Chrome, click **Print or save as PDF**, choose A3 portrait, margins none, background graphics on.
 
 ---
 
@@ -41,13 +51,15 @@ This repository hosts **both the dynamic and static infographics** created for t
 ```text
 rwanda-crvs-infographics-2026/
 ├── index.html              # Dynamic Infographic web application
-├── styles.css              # Custom responsive design system (WCAG AAA compliant)
-├── app.js                  # Interactive controllers, Leaflet map, and Chart.js logic
+├── styles.css              # Editorial design system (paper/ink tokens, chapters, timeline, reveal)
+├── app.js                  # rough.js charts and map, GSAP paging + motion, simulator, theme + i18n
+├── i18n.js                 # French and Kinyarwanda translations keyed by English text
 ├── data.js                 # Cleaned dataset with 30-district GeoJSON & CRVS metrics
 ├── DATA_AUDIT_REPORT.md    # Full data validation dossier against NISR source tables
 ├── README.md               # Project documentation
+├── .claude/skills/         # Design and motion craft skills used while building the UI
 └── static-poster/
-    └── poster.html         # High-resolution print-ready static poster
+    └── poster.html         # A3 print-ready static poster (self-contained)
 ```
 
 ---
@@ -57,7 +69,7 @@ rwanda-crvs-infographics-2026/
 All figures and indicators are strictly validated against official publications from the **National Institute of Statistics of Rwanda (NISR)**:
 * **Primary Source:** *Rwanda Vital Statistics Report 2025* (`Final Tables_CRVS_2025_0.xlsx`)
   * Tables 11, 12, 14, 15, 16; Figures 16, 17, 18, 19, 21, 23, 24, 25; Tables 10.5, 10.6, 10.9.
-* **Geographic Boundaries:** Rwanda ADM2 GeoJSON (`geoBoundaries-RWA-ADM2_simplified.geojson`).
+* **Geographic Boundaries:** Rwanda ADM2 GeoJSON (`geoBoundaries-RWA-ADM2_simplified.geojson`), drawn as inline SVG.
 
 Detailed verification formulas and reconciliation tables are available in [DATA_AUDIT_REPORT.md](DATA_AUDIT_REPORT.md).
 
