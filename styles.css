@@ -576,6 +576,11 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
 .footer p { font-size: 14px; color: var(--ink-2); max-width: 60ch; }
 .footer .mono { margin-bottom: 8px; display: block; }
+.dl-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; }
+.dl-btn--solid { background: var(--sun); border-color: var(--sun); color: #1b1d1c; }
+@media (hover: hover) and (pointer: fine) { .dl-btn--solid:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); } }
+.hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.hero__cta .topbar__btn { margin-top: 0; }
 .dl-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
 .footer__dl { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
 .footer__dl .topbar__btn { font-size: 12px; }
