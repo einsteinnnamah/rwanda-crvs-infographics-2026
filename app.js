@@ -105,15 +105,25 @@
   // currentColor keeps them in sync with both themes without rebuilding the SVGs.
   function buildVitalSketches() {
     if (!window.rough) return;
+    const observer = !REDUCED && 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        playVitalSketch(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.6 }) : null;
     $$('.timeline__sketch').forEach(host => {
       const svg = makeSvg(host, 128, 104), rc = rough.svg(svg);
       svg.removeAttribute('role');
       svg.setAttribute('aria-hidden', 'true');
       svg.setAttribute('focusable', 'false');
+      const drawing = document.createElementNS(NS, 'g');
+      drawing.setAttribute('class', 'vital__drawing');
+      svg.appendChild(drawing);
       const pen = { stroke: 'currentColor', strokeWidth: 1.5, roughness: 1.3, bowing: 0.8, seed: SEED };
       const hatch = { ...pen, stroke: 'none', fill: 'currentColor', fillStyle: 'hachure', hachureGap: 5, fillWeight: 0.7, hachureAngle: -45 };
-      const shade = d => { const g = rc.path(d, hatch); g.setAttribute('opacity', '0.35'); svg.appendChild(g); };
-      const line = d => svg.appendChild(rc.path(d, pen));
+      const shade = (d, parent = drawing) => { const g = rc.path(d, hatch); g.setAttribute('opacity', '0.35'); parent.appendChild(g); };
+      const line = (d, parent = drawing) => parent.appendChild(rc.path(d, pen));
       if (host.dataset.vital === 'death') {
         // Bevelled coffin lid and a narrow side face; no religious symbol.
         shade('M 47 12 L 75 12 L 94 34 L 85 86 L 40 86 L 30 34 Z');
@@ -125,13 +135,53 @@
         // A new sprout: two open leaves, a curved stem, and a light ground stroke.
         const leftLeaf = 'M 62 61 C 38 62 27 48 26 29 C 48 27 62 39 62 61 Z';
         const rightLeaf = 'M 63 47 C 61 25 77 15 101 15 C 100 35 86 49 63 47 Z';
-        shade(leftLeaf); shade(rightLeaf);
-        line(leftLeaf); line(rightLeaf);
         line('M 64 88 C 59 73 62 54 66 43');
-        line('M 61 59 Q 47 45 33 35 M 65 46 Q 82 29 94 22');
+        [[leftLeaf, 'left', 'M 61 59 Q 47 45 33 35'], [rightLeaf, 'right', 'M 65 46 Q 82 29 94 22']].forEach(([d, side, vein]) => {
+          const leaf = document.createElementNS(NS, 'g');
+          leaf.setAttribute('class', 'vital__leaf vital__leaf--' + side);
+          drawing.appendChild(leaf);
+          shade(d, leaf); line(d, leaf); line(vein, leaf);
+        });
         line('M 43 91 Q 64 86 84 91');
       }
+      host.addEventListener('click', e => {
+        // Keyboard activation and reduced motion settle immediately.
+        playVitalSketch(host, { instant: e.detail === 0 });
+      });
+      if (observer) { drawing.style.opacity = 0; observer.observe(host); }
     });
+    labelVitalSketches();
+  }
+
+  function labelVitalSketches() {
+    $$('.timeline__sketch').forEach(host => host.setAttribute('aria-label', t(host.dataset.vital === 'birth' ? 'Replay the sprout drawing' : 'Replay the casket drawing')));
+  }
+
+  const vitalMotion = new WeakMap();
+  function playVitalSketch(host, { instant = false } = {}) {
+    const drawing = $('.vital__drawing', host); if (!drawing) return;
+    const paths = $$('path', drawing), running = vitalMotion.get(host);
+    if (instant || REDUCED) {
+      if (running) running.kill();
+      gsap.set(drawing, { clearProps: 'opacity,transform' });
+      paths.forEach(p => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; });
+      host.removeAttribute('data-playing');
+      return;
+    }
+    // Repeated taps let the current drawing finish instead of restarting it mid-stroke.
+    if (running && running.isActive()) return;
+    const strokes = paths.filter(p => p.getAttribute('stroke') !== 'none');
+    strokes.forEach(p => { const length = p.getTotalLength(); p.style.strokeDasharray = length; p.style.strokeDashoffset = length; });
+    host.setAttribute('data-playing', '');
+    const motion = gsap.timeline({ onComplete() {
+      strokes.forEach(p => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; });
+      host.removeAttribute('data-playing');
+    } });
+    // One brief explanatory entrance; no looping motion beside the statistics.
+    motion.fromTo(drawing, { opacity: 0.3, scale: 0.95, y: host.dataset.vital === 'birth' ? 6 : 0 },
+      { opacity: 1, scale: 1, y: 0, svgOrigin: '64 91', duration: 0.6, ease: EASE, clearProps: 'opacity,transform' }, 0)
+      .to(strokes, { strokeDashoffset: 0, duration: 0.6, stagger: 0.03, ease: EASE }, 0);
+    vitalMotion.set(host, motion);
   }
 
   function roughPie(container, slices) {
@@ -983,6 +1033,7 @@
   // ------------------------------------------------------------
   function rebuildVisuals() {
     readTokens(); buildCharts(); buildChaptersMap();
+    labelVitalSketches();
     if (dotField) dotField.redraw();
     if (window.restyleMap) window.restyleMap();
     if (currentDistrict) updateInspector(currentDistrict);

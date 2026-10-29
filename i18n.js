@@ -5,6 +5,8 @@
  */
 window.I18N = {
   fr: {
+    'Replay the sprout drawing': 'Rejouer le dessin de la pousse',
+    'Replay the casket drawing': 'Rejouer le dessin du cercueil',
     'Who Gets Counted? Rwanda Vital Statistics 2019–2025': 'Qui est compté ? Statistiques de l’état civil du Rwanda 2019–2025',
     'NISR · Rwanda Vital Statistics 2019–2025': 'NISR · Statistiques de l’état civil du Rwanda 2019–2025',
     'Rwanda records 9 in 10 births. It records 1 in 2 deaths.': 'Le Rwanda enregistre 9 naissances sur 10. Il enregistre 1 décès sur 2.',
@@ -157,6 +159,8 @@ window.I18N = {
   },
 
   rw: {
+    'Replay the sprout drawing': 'Ongera werekane igishushanyo cy’urugemwe',
+    'Replay the casket drawing': 'Ongera werekane igishushanyo cy’isanduku',
     'Who Gets Counted? Rwanda Vital Statistics 2019–2025': 'Ni bande babarwa? Imibare y’irangamimerere mu Rwanda 2019–2025',
     'NISR · Rwanda Vital Statistics 2019–2025': 'NISR · Imibare y’irangamimerere mu Rwanda 2019–2025',
     'Rwanda records 9 in 10 births. It records 1 in 2 deaths.': 'U Rwanda rwandika amavuko 9 kuri 10. Rwandika urupfu 1 kuri 2.',

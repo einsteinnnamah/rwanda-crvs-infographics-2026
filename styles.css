@@ -452,9 +452,21 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
 .timeline__panel .note { color: var(--ink-2); margin-top: 14px; max-width: 44ch; }
 .timeline__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; }
 .timeline__stats > div { min-width: 0; }
-.timeline__sketch { display: block; width: clamp(80px, 7vw, 112px); margin-bottom: 20px; color: var(--accent); pointer-events: none; }
+.timeline__sketch { display: block; width: clamp(80px, 7vw, 112px); margin-bottom: 20px; color: var(--accent); border-radius: 8px; transition: transform 160ms var(--ease-out); }
 .timeline__sketch[data-vital="birth"] { color: var(--blue); }
-.timeline__sketch svg { width: 100%; height: auto; overflow: visible; }
+.timeline__sketch svg { width: 100%; height: auto; overflow: visible; transform-origin: 50% 88%; transition: transform 200ms var(--ease-out); }
+.timeline__sketch:focus-visible { outline: 1px dashed currentColor; outline-offset: 4px; }
+.timeline__sketch:active { transform: scale(0.97); }
+.vital__leaf { transition: transform 200ms var(--ease-out); }
+.vital__leaf--left { transform-origin: 62px 61px; }
+.vital__leaf--right { transform-origin: 63px 47px; }
+@media (hover: hover) and (pointer: fine) {
+  .timeline__sketch:hover svg { transform: translateY(-2px) rotate(-2deg); }
+  .timeline__sketch:hover .vital__leaf--left { transform: rotate(-8deg); }
+  .timeline__sketch:hover .vital__leaf--right { transform: rotate(8deg); }
+}
+.timeline__sketch[data-playing] .vital__leaf--left { transform: rotate(-8deg); }
+.timeline__sketch[data-playing] .vital__leaf--right { transform: rotate(8deg); }
 .timeline__stats .figure { font-size: clamp(64px, 9vw, 150px); }
 .timeline__stats .figure.accent { color: var(--accent); }
 .timeline__stats .figure.blue { color: var(--blue); font-size: clamp(40px, 5vw, 80px); }
@@ -618,6 +630,8 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .reveal[data-in][data-d="3"] { transition-delay: 180ms; }
 
 @media (prefers-reduced-motion: reduce) {
+  .timeline__sketch, .timeline__sketch svg, .vital__leaf { transition: none; }
+  .timeline__sketch:active, .timeline__sketch:hover svg, .timeline__sketch .vital__leaf { transform: none; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .loader__caret { animation: none; }
