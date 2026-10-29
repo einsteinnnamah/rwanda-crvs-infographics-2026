@@ -101,6 +101,39 @@
   const hit = (svg, tag, attrs, tipText) => { const h = document.createElementNS(NS, tag); Object.keys(attrs).forEach(k => h.setAttribute(k, attrs[k])); h.setAttribute('fill', 'transparent'); h.setAttribute('class', 'hit'); svg.appendChild(h); bindTip(h, tipText); return h; };
   const fillOpts = (color, extra = {}) => Object.assign({ stroke: C.ink, strokeWidth: 1.6, roughness: 1.8, bowing: 1.2, fill: color, fillStyle: 'hachure', hachureGap: 5, fillWeight: 1.1, hachureAngle: -45, seed: SEED }, extra);
 
+  // Small editorial illustrations, drawn with the same pen and hatching as the charts.
+  // currentColor keeps them in sync with both themes without rebuilding the SVGs.
+  function buildVitalSketches() {
+    if (!window.rough) return;
+    $$('.timeline__sketch').forEach(host => {
+      const svg = makeSvg(host, 128, 104), rc = rough.svg(svg);
+      svg.removeAttribute('role');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+      const pen = { stroke: 'currentColor', strokeWidth: 1.5, roughness: 1.3, bowing: 0.8, seed: SEED };
+      const hatch = { ...pen, stroke: 'none', fill: 'currentColor', fillStyle: 'hachure', hachureGap: 5, fillWeight: 0.7, hachureAngle: -45 };
+      const shade = d => { const g = rc.path(d, hatch); g.setAttribute('opacity', '0.35'); svg.appendChild(g); };
+      const line = d => svg.appendChild(rc.path(d, pen));
+      if (host.dataset.vital === 'death') {
+        // Bevelled coffin lid and a narrow side face; no religious symbol.
+        shade('M 47 12 L 75 12 L 94 34 L 85 86 L 40 86 L 30 34 Z');
+        line('M 47 12 L 75 12 L 94 34 L 85 86 L 40 86 L 30 34 Z');
+        line('M 94 34 L 100 40 L 91 92 L 46 92 L 40 86 M 85 86 L 91 92');
+        line('M 51 21 L 71 21 L 84 37 L 77 77 L 48 77 L 40 37 Z');
+        line('M 32 44 L 27 45 L 28 53 L 34 52 M 92 47 L 98 48 L 96 56 L 90 55');
+      } else {
+        // A new sprout: two open leaves, a curved stem, and a light ground stroke.
+        const leftLeaf = 'M 62 61 C 38 62 27 48 26 29 C 48 27 62 39 62 61 Z';
+        const rightLeaf = 'M 63 47 C 61 25 77 15 101 15 C 100 35 86 49 63 47 Z';
+        shade(leftLeaf); shade(rightLeaf);
+        line(leftLeaf); line(rightLeaf);
+        line('M 64 88 C 59 73 62 54 66 43');
+        line('M 61 59 Q 47 45 33 35 M 65 46 Q 82 29 94 22');
+        line('M 43 91 Q 64 86 84 91');
+      }
+    });
+  }
+
   function roughPie(container, slices) {
     if (!container || !window.rough) return;
     const size = 440, cx = size / 2, cy = size / 2, r = 190;
@@ -1009,7 +1042,7 @@
     currentPage = null;
     renderSignposts();
     initChapters(); initControls(); initRouting(); initFigureHover(); buildChaptersMap(); initMobileNote();
-    buildCharts();
+    buildVitalSketches(); buildCharts();
     initSimulator();
     goTo(PAGES.includes(start) ? start : 'cover', { instant: true, push: false });
     initLoader(() => { if (currentPage === 'cover') heroIntro(); else document.body.classList.remove('is-loading'); });
